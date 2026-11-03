@@ -1,0 +1,11 @@
+id,last_step,reject_reason,channel,platform,card_type
+1,activated,,ads,ios,debit
+2,kyc_passed,scoring_reject,ads,android,credit
+3,personal_data,kyc_timeout,organic,android,debit
+4,started,abandoned_form,ads,web,debit
+5,issued,not_activated,organic,ios,debit
+6,personal_data,kyc_photo_error,ads,android,credit
+7,activated,,referral,ios,debit
+8,started,abandoned_form,ads,web,credit
+9,approved,delivery_failed,organic,ios,credit
+10,kyc_passed,scoring_reject,referral,android,credit

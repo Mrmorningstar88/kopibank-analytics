@@ -1,0 +1,42 @@
+name: Funnel report
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Период, дней"
+        default: "90"
+      demo:
+        description: "Запустить на демо-данных вместо API"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build report
+        env:
+          KOPIBANK_API_URL: ${{ vars.KOPIBANK_API_URL }}
+          KOPIBANK_APPLICATIONS_PATH: ${{ vars.KOPIBANK_APPLICATIONS_PATH }}
+          KOPIBANK_API_TOKEN: ${{ secrets.KOPIBANK_API_TOKEN }}
+        run: |
+          if [ "${{ inputs.demo }}" = "true" ]; then
+            python run_report.py --csv samples/demo.csv
+          else
+            python run_report.py --days "${{ inputs.days }}"
+          fi
+          cat report/funnel.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: funnel-report
+          path: report/
